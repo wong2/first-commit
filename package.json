@@ -1,0 +1,21 @@
+{
+  "name": "first-commit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "wong2",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.0.5",
+    "cached": "^4.0.2",
+    "cheerio": "^0.19.0",
+    "koa": "^1.1.2",
+    "koa-cash": "^1.1.0",
+    "koa-json": "^1.1.1",
+    "koa-router": "^5.2.3",
+    "request-promise": "^1.0.2"
+  }
+}

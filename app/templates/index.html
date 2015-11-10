@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>First Commit - wong2's lab</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.1.6/semantic.min.css">
+  <style type="text/css">
+    .masthead .ui.menu .ui.button {
+      margin-top: 0.5em;
+      margin-left: 0.5em;
+    }
+    .masthead h1.ui.header {
+      margin-top: 1em;
+      margin-bottom: 0em;
+      font-size: 4em;
+      font-weight: normal;
+    }
+    .masthead h2 {
+      font-size: 1.7em;
+      font-weight: normal;
+    }
+    .masthead .action.input {
+      width: 50%;
+    }
+    .masthead .small.button {
+      font-size: .8rem !important;
+    }
+    .masthead .container.grid {
+      margin-bottom: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ui masthead">
+
+    <div class="ui container">
+      <div class="ui secondary menu">
+        <div class="right item">
+          <a class="ui blue basic small button" href="https://github.com/wong2/first-commit">Star on Github</a>
+          <a class="ui blue basic small button" href="https://github.com/wong2">Follow @wong2</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="ui container centered grid">
+      <h1 class="ui header row">FIRST COMMIT</h1>
+      <h2 class="row">find out the first commit of Github repos</h2>
+      <div class="row">
+        <div class="ui action input">
+          <input type="text" placeholder="eg: https://github.com/twbs/bootstrap" id="url-input">
+          <div class="ui large primary button" id="url-button">
+            Go <i class="arrow right icon"></i>
+          </div>
+        </div>
+      </div>
+      <div class="ui labels try-labels">
+        <span>try with: &nbsp;</span>
+        <a class="ui basic label" data-url="https://github.com/twbs/bootstrap">bootstrap</a>
+        <a class="ui basic label" data-url="https://github.com/mitsuhiko/flask">flask</a>
+        <a class="ui basic label" data-url="https://github.com/strongloop/express">express</a>
+        <a class="ui basic label" data-url="https://github.com/antirez/redis">redis</a>
+      </div>
+    </div>
+
+    <div class="ui container centered grid" id="result-container"></div>
+
+  </div>
+
+  <script id="result-tmpl" type="text/x-template">
+    <div class="nine wide column aligned center">
+      <div class="ui raised segment">
+        <h4 class="ui header">The first commit of <a href="https://github.com/${repo}" target="_blank">${repo}</a> is created by <a href="https://github.com/${author}" target="_blank">@${author}</a> on ${time}</h4>
+        <a class="ui basic button" href="${url}" target="_blank">View the commit</a>
+        <a class="ui primary button" href="${browse_url}" target="_blank">Browse the code</a>
+      </div>
+    </div>
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.6/zepto.min.js"></script>
+  <script>
+    // simple template plugin from https://gist.github.com/milesplit/1366395
+    $.fn.tmpl = function(d) {
+      var s = $(this[0]).html().trim();
+      if (d) {
+        for (k in d) {
+          s = s.replace(new RegExp('\\${' + k + '}', 'g'), d[k]);
+        }
+      }
+      return $(s);
+    };
+
+    $(function() {
+
+      var REPO_REGEX = /github.com\/(\w+\/\w+)/;
+
+      function showInputError(msg) {
+        alert(msg);
+      }
+
+      function submit() {
+        var url = $('#url-input').val().trim();
+        var m = REPO_REGEX.exec(url);
+        if (!m) {
+          showInputError('Not a valid Github repo url');
+          return;
+        }
+        var repo = m[1];
+        $.ajax({
+          url: 'api/' + repo,
+          dataType: 'json',
+          timeout: 15000,
+          beforeSend: function(xhr) {
+            $('#url-button').addClass('loading');
+          },
+          complete: function() {
+            $('#url-button').removeClass('loading');
+          },
+          success: function(data, status, xhr) {
+            data['time'] = (new Date(data['time'])).toDateString();
+            var elem = $('#result-tmpl').tmpl(data);
+            $('#result-container').empty().append(elem);
+          },
+          error: function(xhr, errorType, error) {
+            showInputError('Something is wrong, check the input or try again');
+          }
+        });
+      }
+
+      $('#url-input').on('keydown', function(e) {
+        if (e.which == 13) {
+          submit();
+        }
+      });
+
+      $('#url-button').on('click', function() {
+        if (!$(this).hasClass('loading')) {
+          submit();
+        }
+      });
+
+      $('.try-labels a').on('click', function() {
+        var url = $(this).data('url');
+        $('#url-input').val(url);
+        $('#url-button').click();
+      });
+
+    });
+  </script>
+
+</body>
+</html>
