@@ -10,11 +10,16 @@ router.get('/', function *(next) {
 });
 
 router.get('/api/:user/:repo', function *(next) {
-  if (yield* this.cashed()) {
-    return;
-  }
   var params = this.params;
   var repo = params.user + '/' + params.repo;
+
+  console.log('Got request for', repo);
+
+  if (yield* this.cashed()) {
+    console.log(repo, ' is cached');
+    return;
+  }
+
   try {
     this.body = yield github.getFirstCommit(repo);
   } catch (e) {
