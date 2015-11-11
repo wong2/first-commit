@@ -1,6 +1,7 @@
 var app = require('koa')();
 var json = require('koa-json');
 var cached = require('cached');
+var raven = require('raven');
 var router = require('./app/router');
 
 var cache = cached('first-commit', {
@@ -23,6 +24,11 @@ app
   .use(json({pretty: false, param: 'pretty'}))
   .use(router.routes())
   .use(router.allowedMethods());
+
+
+app.on('error', function(err) {
+  raven.captureException(err);
+});
 
 app.listen(3000);
 console.log('Listening on port 3000 ...');

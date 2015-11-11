@@ -20,11 +20,7 @@ router.get('/api/:user/:repo', function *(next) {
     return;
   }
 
-  try {
-    this.body = yield github.getFirstCommit(repo);
-  } catch (e) {
-    console.error(e);
-  }
+  this.body = yield github.getFirstCommit(repo);
 });
 
 
