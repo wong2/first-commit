@@ -22,11 +22,13 @@ function fetch(url) {
 function getRepoCommitsCount(repo) {
   return new Promise((resolve, reject) => {
     var url = `${BASE_URL}/${repo}`;
+    console.log('Fetching ', url);
     fetch(url)
       .then($ => {
         var num_str = $('.numbers-summary .commits .num').text().trim();
         var num = parseInt(num_str.replace(/,/g, ''), 10);
         resolve(num);
+        console.log('Got commit count', num);
       })
       .catch(reject);
   });

@@ -16,6 +16,7 @@
     "koa-cash": "^1.1.0",
     "koa-json": "^1.1.1",
     "koa-router": "^5.2.3",
+    "koa-send": "^3.1.0",
     "request-promise": "^1.0.2"
   }
 }
