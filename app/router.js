@@ -3,11 +3,15 @@ var send = require('koa-send');
 var github = require('./github')
 
 
-router.get('/', function *(next) {
+var serveIndex = function *(next) {
   yield send(this, 'index.html', {
     root: __dirname + '/templates'
   });
-});
+};
+
+router.get('/', serveIndex);
+router.get('/:user/:repo', serveIndex);
+
 
 router.get('/api/:user/:repo', function *(next) {
   var params = this.params;

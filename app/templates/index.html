@@ -94,6 +94,7 @@
   </script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/zepto/1.1.6/zepto.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/history.js/1.8/native.history.min.js"></script>
   <script>
     // simple template plugin from https://gist.github.com/milesplit/1366395
     $.fn.tmpl = function(d) {
@@ -121,9 +122,12 @@
           showInputError('Not a valid Github repo url');
           return;
         }
+
         var repo = m[1];
+        History.pushState({repo: repo}, 'First commit - ' + repo, '/' + repo);
+
         $.ajax({
-          url: 'api/' + repo,
+          url: '/api/' + repo,
           dataType: 'json',
           timeout: 15000,
           beforeSend: function(xhr) {
@@ -143,6 +147,11 @@
         });
       }
 
+      function enterURL(url) {
+        $('#url-input').val(url);
+        $('#url-button').click();
+      }
+
       $('#url-input').on('keydown', function(e) {
         if (e.which == 13) {
           submit();
@@ -157,8 +166,15 @@
 
       $('.try-labels a').on('click', function() {
         var url = $(this).data('url');
-        $('#url-input').val(url);
-        $('#url-button').click();
+        enterURL(url);
+      });
+
+      History.Adapter.onDomLoad(function() {
+        var path = location.pathname;
+        if (path != '/') {
+          var url = 'https://github.com' + path;
+          enterURL(url);
+        }
       });
 
     });
