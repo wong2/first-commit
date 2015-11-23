@@ -110,7 +110,7 @@
 
     $(function() {
 
-      var REPO_REGEX = /github.com\/([\w|-]+\/[\w|-]+)/;
+      var REPO_REGEX = /([\w|-]+\/[\w|-]+)\s*$/;
 
       function showInputError(msg) {
         alert(msg);
