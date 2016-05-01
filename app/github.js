@@ -48,7 +48,7 @@ function extractFirstCommitInfo($) {
 
   var author_id = li.find('.commit-author-section a').text().trim();
   var commit_title = li.find('.commit-title a').text().trim();
-  var time_str = li.find('time').attr('datetime');
+  var time_str = li.find('relative-time').attr('datetime');
 
   return {
     repo: repo,
