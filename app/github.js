@@ -43,8 +43,8 @@ function getFirstPageUrl(repo, num_of_commits) {
 function extractFirstCommitInfo($) {
   var li = $('.commit.commits-list-item').last();
 
-  var tmp = li.data('channel').split(':commit:');
-  var repo = tmp[0], sha = tmp[1];
+  var repo = $('meta[property="og:title"]').attr('content');
+  var sha = li.find('.commit-links-cell .zeroclipboard-button').data('clipboard-text');
 
   var author_id = li.find('.commit-author-section a').text().trim();
   var commit_title = li.find('.commit-title a').text().trim();
