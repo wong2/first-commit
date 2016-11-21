@@ -1,0 +1,13 @@
+{
+  "apps" : [
+    {
+      "name"        : "first-commit",
+      "script"      : "index.js",
+      "exec_mode"   : "cluster",
+      "instances"   : 2,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
